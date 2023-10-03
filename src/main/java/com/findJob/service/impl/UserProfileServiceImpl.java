@@ -5,6 +5,7 @@ import com.findJob.entity.*;
 import com.findJob.exception.BadRequestException;
 import com.findJob.exception.NotFoundException;
 import com.findJob.repository.UserProfileRepository;
+import com.findJob.repository.UserRepository;
 import com.findJob.service.*;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -20,27 +21,26 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     private UserProfileRepository userProfileRepository;
     private ModelMapper modelMapper;
-    private RestTemplate restTemplate;
 
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
 
-    @Autowired
-    private EducationService educationService;
-    @Autowired
-    private CertificationService certificationService;
+//    @Autowired
+//    private EducationService educationService;
+//
+//    @Autowired
+//    private CertificationService certificationService;
+//
+//    @Autowired
+//    private ExperienceService experienceService;
+//
+//    @Autowired
+//    private LanguageService languageService;
 
-    @Autowired
-    private ExperienceService experienceService;
-
-    @Autowired
-    private LanguageService languageService;
-
-    public UserProfileServiceImpl(UserProfileRepository userProfileRepository, ModelMapper modelMapper, RestTemplate restTemplate) {
+    public UserProfileServiceImpl(UserProfileRepository userProfileRepository, ModelMapper modelMapper) {
 
         this.userProfileRepository = userProfileRepository;
         this.modelMapper = modelMapper;
-        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -57,11 +57,14 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
-    public UserProfileDTO getUserProfile(Integer userId) throws NotFoundException {
+    public UserProfileDTO getUserProfile(Integer userId) throws NotFoundException, BadRequestException {
 
-        UserDTO userDTO = userService.getUser(userId);
+        Optional<User> optionalUser = userRepository.findById(userId);
+        User user = optionalUser.orElseThrow(()->new NotFoundException("User not found!"));
 
-        UserProfile userProfile = userProfileRepository.findByUser(modelMapper.map(userDTO, User.class));
+        if(!user.getIsActive()) throw new BadRequestException("This account is disabled!");
+
+        UserProfile userProfile = userProfileRepository.findByUser(user);
 
         if (userProfile == null) throw new NotFoundException("User not found!");
 
@@ -106,7 +109,6 @@ public class UserProfileServiceImpl implements UserProfileService {
     public UserProfileDTO updateUserProfile(Integer userProfileId, UserProfileDTO userProfileDTO) throws NotFoundException {
 
         Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
-
         UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
 
         if (userProfileDTO.getName() != null) userProfile.setName(userProfileDTO.getName());
@@ -127,110 +129,110 @@ public class UserProfileServiceImpl implements UserProfileService {
         return modelMapper.map(userProfile, UserProfileDTO.class);
     }
 
-    @Override
-    public EducationDTO addEducationToProfile(Integer userProfileId, EducationDTO educationDTO) throws NotFoundException {
-
-        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
-        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
-
-        EducationDTO educationResponse =educationService.createEducation(educationDTO);
-        userProfile.getEducation().add(modelMapper.map(educationResponse, Education.class));
-
-        return educationResponse;
-    }
-
-    @Override
-    public CertificationDTO addCertificationToProfile(Integer userProfileId, CertificationDTO certificationDTO) throws NotFoundException {
-
-        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
-        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
-
-        CertificationDTO certificationResponse =  certificationService.createCertification(certificationDTO);
-        userProfile.getCertifications().add(modelMapper.map(certificationResponse, Certification.class));
-
-        return certificationResponse;
-    }
-
-    @Override
-    public ExperienceDTO addExperienceToProfile(Integer userProfileId, ExperienceDTO experienceDTO) throws NotFoundException {
-
-        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
-        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
-
-        ExperienceDTO experienceResponse = experienceService.createExperience(experienceDTO);
-        userProfile.getExperiences().add(modelMapper.map(experienceResponse, Experience.class));
-
-        return experienceResponse;
-    }
-
-    @Override
-    public LanguageDTO addLanguageToProfile(Integer userProfileId, LanguageDTO languageDTO) throws NotFoundException {
-
-        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
-        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
-
-        LanguageDTO languageResponse = languageService.createLanguage(languageDTO);
-        userProfile.getLanguages().add(modelMapper.map(languageResponse, Language.class));
-
-        return languageResponse;
-    }
-
-    @Override
-    public EducationDTO deleteEducationFromProfile(Integer userProfileId, Integer educationId) throws NotFoundException {
-
-        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
-        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
-
-        EducationDTO educationDTO = educationService.deleteEducation(educationId);
-        Education educationToRemove = modelMapper.map(educationDTO, Education.class);
-
-        userProfile.getEducation().remove(educationToRemove);
-
-        return educationDTO;
-    }
-
-    @Override
-    public CertificationDTO deleteCertificationFromProfile(Integer userProfileId, Integer certificationId) throws NotFoundException {
-
-        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
-        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
-
-        CertificationDTO certificationDTO = certificationService.deleteCertification(certificationId);
-        Certification certificationToRemove = modelMapper.map(certificationDTO, Certification.class);
-
-        userProfile.getCertifications().remove(certificationToRemove);
-
-        return certificationDTO;
-
-    }
-
-    @Override
-    public ExperienceDTO deleteExperienceFromProfile(Integer userProfileId, Integer experienceId) throws NotFoundException {
-
-        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
-        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
-
-        ExperienceDTO experienceDTO = experienceService.deleteExperience(experienceId);
-        Experience experienceToRemove = modelMapper.map(experienceDTO, Experience.class);
-
-        userProfile.getExperiences().remove(experienceToRemove);
-
-        return experienceDTO;
-    }
-
-    @Override
-    public LanguageDTO deleteLanguageFromProfile(Integer userProfileId, Integer languageId) throws NotFoundException {
-
-        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
-        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
-
-        LanguageDTO languageDTO = languageService.deleteLanguage(languageId);
-        Language languageToRemove = modelMapper.map(languageDTO, Language.class);
-
-        userProfile.getLanguages().remove(languageToRemove);
-
-        return languageDTO;
-    }
+//    @Override
+//    public EducationDTO addEducationToProfile(Integer userProfileId, EducationDTO educationDTO) throws NotFoundException {
+//
+//        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
+//        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
+//
+//        EducationDTO educationResponse =educationService.createEducation(educationDTO);
+//        userProfile.getEducation().add(modelMapper.map(educationResponse, Education.class));
+//
+//        return educationResponse;
+//    }
+//
+//    @Override
+//    public CertificationDTO addCertificationToProfile(Integer userProfileId, CertificationDTO certificationDTO) throws NotFoundException {
+//
+//        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
+//        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
+//
+//        CertificationDTO certificationResponse =  certificationService.createCertification(certificationDTO);
+//        userProfile.getCertifications().add(modelMapper.map(certificationResponse, Certification.class));
+//
+//        return certificationResponse;
+//    }
+//
+//    @Override
+//    public ExperienceDTO addExperienceToProfile(Integer userProfileId, ExperienceDTO experienceDTO) throws NotFoundException {
+//
+//        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
+//        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
+//
+//        ExperienceDTO experienceResponse = experienceService.createExperience(experienceDTO);
+//        userProfile.getExperiences().add(modelMapper.map(experienceResponse, Experience.class));
+//
+//        return experienceResponse;
+//    }
+//
+//    @Override
+//    public LanguageDTO addLanguageToProfile(Integer userProfileId, LanguageDTO languageDTO) throws NotFoundException {
+//
+//        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
+//        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
+//
+//        LanguageDTO languageResponse = languageService.createLanguage(languageDTO);
+//        userProfile.getLanguages().add(modelMapper.map(languageResponse, Language.class));
+//
+//        return languageResponse;
+//    }
+//
+//    @Override
+//    public EducationDTO deleteEducationFromProfile(Integer userProfileId, Integer educationId) throws NotFoundException {
+//
+//        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
+//        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
+//
+//        EducationDTO educationDTO = educationService.deleteEducation(educationId);
+//        Education educationToRemove = modelMapper.map(educationDTO, Education.class);
+//
+//        userProfile.getEducation().remove(educationToRemove);
+//
+//        return educationDTO;
+//    }
+//
+//    @Override
+//    public CertificationDTO deleteCertificationFromProfile(Integer userProfileId, Integer certificationId) throws NotFoundException {
+//
+//        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
+//        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
+//
+//        CertificationDTO certificationDTO = certificationService.deleteCertification(certificationId);
+//        Certification certificationToRemove = modelMapper.map(certificationDTO, Certification.class);
+//
+//        userProfile.getCertifications().remove(certificationToRemove);
+//
+//        return certificationDTO;
+//
+//    }
+//
+//    @Override
+//    public ExperienceDTO deleteExperienceFromProfile(Integer userProfileId, Integer experienceId) throws NotFoundException {
+//
+//        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
+//        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
+//
+//        ExperienceDTO experienceDTO = experienceService.deleteExperience(experienceId);
+//        Experience experienceToRemove = modelMapper.map(experienceDTO, Experience.class);
+//
+//        userProfile.getExperiences().remove(experienceToRemove);
+//
+//        return experienceDTO;
+//    }
+//
+//    @Override
+//    public LanguageDTO deleteLanguageFromProfile(Integer userProfileId, Integer languageId) throws NotFoundException {
+//
+//        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
+//        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
+//
+//        LanguageDTO languageDTO = languageService.deleteLanguage(languageId);
+//        Language languageToRemove = modelMapper.map(languageDTO, Language.class);
+//
+//        userProfile.getLanguages().remove(languageToRemove);
+//
+//        return languageDTO;
+//    }
 
 
 }

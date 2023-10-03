@@ -5,12 +5,12 @@ import com.findJob.exception.NotFoundException;
 
 public interface CertificationService {
 
-    CertificationDTO createCertification(CertificationDTO certificationDTO);
+    CertificationDTO createCertification(Integer userProfileId, CertificationDTO certificationDTO) throws NotFoundException;
 
     CertificationDTO getCertification(Integer certificationId) throws NotFoundException;
 
     CertificationDTO updateCertification(Integer certificationId, CertificationDTO certificationDTO) throws NotFoundException;
 
-    CertificationDTO deleteCertification(Integer certificationId) throws NotFoundException;
+    CertificationDTO deleteCertification(Integer userProfileId, Integer certificationId) throws NotFoundException;
 }
 

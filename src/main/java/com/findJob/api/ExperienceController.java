@@ -18,9 +18,9 @@ public class ExperienceController {
     }
 
     @PostMapping
-    public ResponseEntity<ExperienceDTO> createExperience(@RequestBody ExperienceDTO experienceDTO){
+    public ResponseEntity<ExperienceDTO> createExperience(@RequestParam("userProfile") Integer userProfileId, @RequestBody ExperienceDTO experienceDTO) throws NotFoundException {
 
-        ExperienceDTO experience = experienceService.createExperience(experienceDTO);
+        ExperienceDTO experience = experienceService.createExperience(userProfileId, experienceDTO);
         return new ResponseEntity<>(experience, HttpStatus.CREATED);
     }
     @GetMapping
@@ -29,16 +29,18 @@ public class ExperienceController {
         ExperienceDTO experience = experienceService.getExperience(experienceId);
         return new ResponseEntity<>(experience, HttpStatus.OK);
     }
+
     @PatchMapping
     public ResponseEntity<ExperienceDTO> updateExperience(@RequestParam("experience") Integer experienceId, @RequestBody ExperienceDTO experienceDTO) throws NotFoundException {
 
         ExperienceDTO experience = experienceService.updateExperience(experienceId, experienceDTO);
         return new ResponseEntity<>(experience, HttpStatus.OK);
     }
-    @DeleteMapping
-    public ResponseEntity<ExperienceDTO> deleteExperience(@RequestParam("experience") Integer experienceId) throws NotFoundException {
 
-        ExperienceDTO experience = experienceService.deleteExperience(experienceId);
+    @DeleteMapping
+    public ResponseEntity<ExperienceDTO> deleteExperience(@RequestParam("userProfile") Integer userProfileId, @RequestParam("experience") Integer experienceId) throws NotFoundException {
+
+        ExperienceDTO experience = experienceService.deleteExperience(userProfileId, experienceId);
         return new ResponseEntity<>(experience, HttpStatus.OK);
     }
 }

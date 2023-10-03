@@ -18,9 +18,9 @@ public class EducationController {
     }
 
     @PostMapping
-    public ResponseEntity<EducationDTO> createEducation(@RequestBody EducationDTO educationDTO){
+    public ResponseEntity<EducationDTO> createEducation(@RequestParam("userProfile") Integer userProfileId, @RequestBody EducationDTO educationDTO) throws NotFoundException {
 
-        EducationDTO education = educationService.createEducation(educationDTO);
+        EducationDTO education = educationService.createEducation(userProfileId, educationDTO);
         return new ResponseEntity<>(education, HttpStatus.CREATED);
     }
 
@@ -39,9 +39,9 @@ public class EducationController {
     }
 
     @DeleteMapping
-    public ResponseEntity<EducationDTO> deleteEducation(@RequestParam("education") Integer educationId) throws NotFoundException {
+    public ResponseEntity<EducationDTO> deleteEducation(@RequestParam("userProfile") Integer userProfileId, @RequestParam("education") Integer educationId) throws NotFoundException {
 
-        EducationDTO education = educationService.deleteEducation(educationId);
+        EducationDTO education = educationService.deleteEducation(userProfileId, educationId);
         return new ResponseEntity<>(education, HttpStatus.OK);
     }
 }

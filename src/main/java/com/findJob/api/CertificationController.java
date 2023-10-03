@@ -18,8 +18,8 @@ public class CertificationController {
         this.certificationService = certificationService;
     }
     @PostMapping
-    public ResponseEntity<CertificationDTO> createCertification(@RequestBody CertificationDTO certificationDTO){
-        CertificationDTO certification = certificationService.createCertification(certificationDTO);
+    public ResponseEntity<CertificationDTO> createCertification(@RequestParam("userProfile") Integer userProfileId, @RequestBody CertificationDTO certificationDTO) throws NotFoundException {
+        CertificationDTO certification = certificationService.createCertification(userProfileId, certificationDTO);
         return new ResponseEntity<>(certification, HttpStatus.CREATED);
     }
     @GetMapping
@@ -33,8 +33,8 @@ public class CertificationController {
         return new ResponseEntity<>(certification, HttpStatus.OK);
     }
     @DeleteMapping
-    public ResponseEntity<CertificationDTO> deleteCertification(@RequestParam("certification") Integer certificationId) throws NotFoundException {
-        CertificationDTO certificationDTO = certificationService.deleteCertification(certificationId);
+    public ResponseEntity<CertificationDTO> deleteCertification(@RequestParam("userProfile") Integer userProfileId, @RequestParam("certification") Integer certificationId) throws NotFoundException {
+        CertificationDTO certificationDTO = certificationService.deleteCertification(userProfileId, certificationId);
         return new ResponseEntity<>(certificationDTO, HttpStatus.OK);
     }
 }
