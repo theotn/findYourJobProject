@@ -5,6 +5,7 @@ import com.findJob.entity.User;
 import com.findJob.enums.Role;
 import com.findJob.exception.BadRequestException;
 import com.findJob.exception.NotFoundException;
+import com.findJob.service.EmployerProfileService;
 import com.findJob.service.UserProfileService;
 import com.findJob.service.UserService;
 import jakarta.validation.Valid;
@@ -24,12 +25,17 @@ import java.util.Map;
 public class UserController {
 
     private UserService userService;
-    @Autowired
+
     private UserProfileService userProfileService;
+
+    private EmployerProfileService employerProfileService;
+
     private RestTemplate restTemplate;
 
-    public UserController(UserService userService, RestTemplate restTemplate) {
+    public UserController(UserService userService, UserProfileService userProfileService, EmployerProfileService employerProfileService, RestTemplate restTemplate) {
         this.userService = userService;
+        this.userProfileService = userProfileService;
+        this.employerProfileService = employerProfileService;
         this.restTemplate = restTemplate;
     }
 
@@ -44,6 +50,7 @@ public class UserController {
 
         } else if(user.getRole() == Role.COMPANY) {
 
+            employerProfileService.createEmployerProfile(user);
         }
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
@@ -63,8 +70,8 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<UserDTO> updateUser(@RequestParam("user") Integer userId,@RequestBody UserDTO userDTO) throws BadRequestException, NotFoundException {
+    @PatchMapping
+    public ResponseEntity<UserDTO> updateUser(@RequestParam("user") Integer userId, @Valid @RequestBody UserDTO userDTO) throws BadRequestException, NotFoundException {
 
         UserDTO user = userService.updateUser(userId,userDTO);
         return new ResponseEntity<>(user, HttpStatus.OK);
@@ -77,11 +84,6 @@ public class UserController {
 //        return new ResponseEntity<>(user, HttpStatus.OK);
 //    }
 
-//    @PostMapping("/feedback")
-//    public ResponseEntity<String> reportFeedback(@RequestParam("user") Integer userId, @RequestParam("feedback") Integer feedbackId) throws NotFoundException {
-//
-//        userService.reportFeedback(userId, feedbackId);
-//        return new ResponseEntity<>("succes", HttpStatus.OK);
-//    }
+
 
 }

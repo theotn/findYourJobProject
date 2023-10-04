@@ -5,13 +5,13 @@ import com.findJob.exception.NotFoundException;
 
 public interface LanguageService {
 
-    LanguageDTO createLanguage(LanguageDTO languageDTO);
+    LanguageDTO createLanguage(Integer userProfileId, LanguageDTO languageDTO) throws NotFoundException;
 
     LanguageDTO getLanguage(Integer languageId) throws NotFoundException;
 
     LanguageDTO updateLanguage(Integer languageId, LanguageDTO languageDTO) throws NotFoundException;
 
-    LanguageDTO deleteLanguage(Integer languageId) throws NotFoundException;
+    LanguageDTO deleteLanguage(Integer userProfileId, Integer languageId) throws NotFoundException;
 
 
 }

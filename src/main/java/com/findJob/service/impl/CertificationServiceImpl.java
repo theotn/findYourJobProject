@@ -2,10 +2,13 @@ package com.findJob.service.impl;
 
 import com.findJob.dto.CertificationDTO;
 import com.findJob.entity.Certification;
+import com.findJob.entity.UserProfile;
 import com.findJob.exception.NotFoundException;
 import com.findJob.repository.CertificationRepository;
+import com.findJob.repository.UserProfileRepository;
 import com.findJob.service.CertificationService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,17 +21,24 @@ public class CertificationServiceImpl implements CertificationService {
     private CertificationRepository certificationRepository;
     private ModelMapper modelMapper;
 
-    public CertificationServiceImpl(CertificationRepository certificationRepository, ModelMapper modelMapper) {
+    private UserProfileRepository userProfileRepository;
 
+    public CertificationServiceImpl(CertificationRepository certificationRepository, ModelMapper modelMapper, UserProfileRepository userProfileRepository) {
         this.certificationRepository = certificationRepository;
         this.modelMapper = modelMapper;
+        this.userProfileRepository = userProfileRepository;
     }
 
     @Override
-    public CertificationDTO createCertification(CertificationDTO certificationDTO) {
+    public CertificationDTO createCertification(Integer userProfileId, CertificationDTO certificationDTO) throws NotFoundException {
+
+        Optional<UserProfile> optionalUserProfile = userProfileRepository.findById(userProfileId);
+        UserProfile userProfile = optionalUserProfile.orElseThrow(() -> new NotFoundException("Profile not found!"));
 
         Certification certification = modelMapper.map(certificationDTO, Certification.class);
         certificationRepository.save(certification);
+
+        userProfile.getCertifications().add(certification);
 
         return modelMapper.map(certification, CertificationDTO.class);
     }
@@ -59,11 +69,15 @@ public class CertificationServiceImpl implements CertificationService {
     }
 
     @Override
-    public CertificationDTO deleteCertification(Integer certificationId) throws NotFoundException {
+    public CertificationDTO deleteCertification(Integer userProfileId, Integer certificationId) throws NotFoundException {
+
+        Optional<UserProfile> optionalUserProfile = userProfileRepository.findById(userProfileId);
+        UserProfile userProfile = optionalUserProfile.orElseThrow(() -> new NotFoundException("Profile not found!"));
 
         Optional<Certification> certificationOptional = certificationRepository.findById(certificationId);
         Certification certification = certificationOptional.orElseThrow(() -> new NotFoundException("Certification Not found!"));
 
+        userProfile.getCertifications().remove(certification);
         certificationRepository.delete(certification);
 
         return modelMapper.map(certification, CertificationDTO.class);

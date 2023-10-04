@@ -18,9 +18,9 @@ public class LanguageController {
     }
 
     @PostMapping
-    public ResponseEntity<LanguageDTO> createLanguage(@RequestBody LanguageDTO languageDTO){
+    public ResponseEntity<LanguageDTO> createLanguage(@RequestParam("userProfile") Integer userProfileId, @RequestBody LanguageDTO languageDTO) throws NotFoundException {
 
-        LanguageDTO education = languageService.createLanguage(languageDTO);
+        LanguageDTO education = languageService.createLanguage(userProfileId, languageDTO);
         return new ResponseEntity<>(education, HttpStatus.CREATED);
     }
 
@@ -39,9 +39,9 @@ public class LanguageController {
     }
 
     @DeleteMapping
-    public ResponseEntity<LanguageDTO> deleteLanguage(@RequestParam("language") Integer languageId) throws NotFoundException {
+    public ResponseEntity<LanguageDTO> deleteLanguage(@RequestParam("userProfile") Integer userProfileId, @RequestParam("language") Integer languageId) throws NotFoundException {
 
-        LanguageDTO education = languageService.deleteLanguage(languageId);
+        LanguageDTO education = languageService.deleteLanguage(userProfileId, languageId);
         return new ResponseEntity<>(education, HttpStatus.OK);
     }
 

@@ -5,11 +5,11 @@ import com.findJob.exception.NotFoundException;
 
 public interface EducationService {
 
-    EducationDTO createEducation(EducationDTO educationDTO);
+    EducationDTO createEducation(Integer userProfileId, EducationDTO educationDTO) throws NotFoundException;
 
     EducationDTO getEducation(Integer educationId) throws NotFoundException;
 
     EducationDTO updateEducation(Integer educationId, EducationDTO educationDTO) throws NotFoundException;
 
-    EducationDTO deleteEducation(Integer educationId) throws NotFoundException;
+    EducationDTO deleteEducation(Integer userProfileId, Integer educationId) throws NotFoundException;
 }
