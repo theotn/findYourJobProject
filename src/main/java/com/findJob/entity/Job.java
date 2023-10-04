@@ -28,6 +28,9 @@ public class Job {
     private Boolean isActive;
     private Integer reports;
 
+    @ManyToOne
+    private EmployerProfile employerProfile;
+
     @OneToMany
     private List<Comment> comments;
 //
@@ -40,5 +43,8 @@ public class Job {
 
     @OneToMany(mappedBy = "job")
     private List<UserProfileJob> candidates;
+
+    @ElementCollection
+    private List<Integer> userReportList;
 
 }

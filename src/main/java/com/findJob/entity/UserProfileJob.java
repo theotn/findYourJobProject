@@ -21,12 +21,10 @@ public class UserProfileJob {
     @JoinColumn(name="job_id")
     private Job job;
 
-    @Column(columnDefinition = "boolean DEFAULT FALSE")
-    private Boolean isAccepted;
+    private Boolean isAccepted = false;
 
     private LocalDateTime dateTime;
 
-    @Column(columnDefinition = "boolean DEFAULT FALSE")
-    private Boolean userAccept;
+    private Boolean userAccept = false;
 
 }

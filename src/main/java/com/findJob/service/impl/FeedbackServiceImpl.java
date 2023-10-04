@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -50,6 +51,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         Optional<EmployerProfile> employerProfileOptional = employerProfileRepository.findById(employerProfileId);
         EmployerProfile employerProfile = employerProfileOptional.orElseThrow(()-> new NotFoundException("Profile not found!"));
 
+        feedback.setDate(LocalDate.now());
         feedback.setReports(0);
         feedback.setUser(user);
 
@@ -111,6 +113,18 @@ public class FeedbackServiceImpl implements FeedbackService {
         if (feedback.getUserReportList().contains(userId))
             throw new NotFoundException("This feedback has already been reported!");
         else feedback.getUserReportList().add(userId);
+
+        return modelMapper.map(feedback, FeedbackDTO.class);
+    }
+
+    @Override
+    public FeedbackDTO updateFeedback(Integer feedbackId, FeedbackDTO feedbackDTO) throws NotFoundException {
+
+        Optional<Feedback> feedbackOptional = feedbackRepository.findById(feedbackId);
+        Feedback feedback = feedbackOptional.orElseThrow(() -> new NotFoundException("Not found!"));
+
+        if(feedbackDTO.getDescription() != null) feedback.setDescription(feedbackDTO.getDescription());
+        if(feedbackDTO.getStars() != null) feedback.setStars(feedbackDTO.getStars());
 
         return modelMapper.map(feedback, FeedbackDTO.class);
     }
