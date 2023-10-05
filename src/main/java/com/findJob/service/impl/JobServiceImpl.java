@@ -3,6 +3,7 @@ package com.findJob.service.impl;
 import com.findJob.dto.FeedbackDTO;
 import com.findJob.dto.JobDTO;
 import com.findJob.dto.UserDTO;
+import com.findJob.dto.UserProfileDTO;
 import com.findJob.entity.*;
 import com.findJob.exception.BadRequestException;
 import com.findJob.exception.NotFoundException;
@@ -69,6 +70,19 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    public List<JobDTO> getJobs(Integer employerProfileId) throws NotFoundException {
+        Optional<EmployerProfile> employerProfileOptional = employerProfileRepository.findById(employerProfileId);
+        EmployerProfile employerProfile = employerProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
+
+        List<Job> jobList = jobRepository.findByEmployerProfile(employerProfile);
+        List<JobDTO> jobDTOList = new ArrayList<>();
+        for(Job j : jobList){
+            jobDTOList.add(this.modelMapper.map(j, JobDTO.class));
+        }
+        return jobDTOList;
+    }
+
+    @Override
     public JobDTO updateJob(Integer jobId, JobDTO jobDTO) throws NotFoundException {
 
         Optional<Job> jobOptional = jobRepository.findById(jobId);
@@ -115,6 +129,40 @@ public class JobServiceImpl implements JobService {
         jobDTO.setNoOfCandidates(noOfCandidates);
 
         return jobDTO;
+    }
+
+    @Override
+    public List<JobDTO> getJobsForUser(Integer userProfileId) throws NotFoundException {
+        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
+        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
+
+        List<UserProfileJob> userProfileJobList = userProfileJobRepository.findByUserProfile(userProfile);
+
+        List<JobDTO> jobDTOList = new ArrayList<>();
+
+        for(UserProfileJob u : userProfileJobList){
+            Optional<Job> optionalJob = jobRepository.findById(u.getJob().getId());
+            Job job = optionalJob.orElseThrow(() -> new NotFoundException("Job not found!"));
+
+            jobDTOList.add(this.modelMapper.map(job, JobDTO.class));
+        }
+
+        return jobDTOList;
+    }
+
+    @Override
+    public List<UserProfileDTO> getUsersForJob(Integer jobId) throws NotFoundException {
+        Optional<Job> jobOptional = jobRepository.findById(jobId);
+        Job job = jobOptional.orElseThrow(() -> new NotFoundException("Job not found!"));
+
+        List<UserProfileJob> userProfileJobList = userProfileJobRepository.findByJob(job);
+        List<UserProfileDTO> userProfileDTOList = new ArrayList<>();
+        for(UserProfileJob u : userProfileJobList){
+            Optional<UserProfile> userProfileOptional = userProfileRepository.findById(u.getUserProfile().getId());
+            UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("UserProfile not found!"));
+            userProfileDTOList.add(this.modelMapper.map(userProfile, UserProfileDTO.class));
+        }
+        return userProfileDTOList;
     }
 
     @Override

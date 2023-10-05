@@ -1,5 +1,6 @@
 package com.findJob.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -39,6 +40,7 @@ public class UserProfile {
     private List<Language> languages;
 
     @OneToMany(mappedBy = "userProfile")
+    @JsonIgnore
     private List<UserProfileJob> jobs;
 
     @OneToOne

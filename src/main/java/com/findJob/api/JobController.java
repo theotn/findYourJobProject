@@ -2,6 +2,7 @@ package com.findJob.api;
 
 import com.findJob.dto.FeedbackDTO;
 import com.findJob.dto.JobDTO;
+import com.findJob.dto.UserProfileDTO;
 import com.findJob.exception.BadRequestException;
 import com.findJob.exception.NotFoundException;
 import com.findJob.service.JobService;
@@ -31,6 +32,24 @@ public class JobController {
     public ResponseEntity<JobDTO> getJob(@RequestParam("job") Integer jobId) throws NotFoundException {
         JobDTO job = jobService.getJob(jobId);
         return new ResponseEntity<>(job, HttpStatus.OK);
+    }
+
+    @GetMapping("/employer")
+    public ResponseEntity<List<JobDTO>> getJobs(@RequestParam("employerProfile") Integer employerProfileId) throws NotFoundException {
+        List<JobDTO> jobDTOList = jobService.getJobs(employerProfileId);
+        return new ResponseEntity<>(jobDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping("/user-applied-list")
+    public ResponseEntity<List<JobDTO>> getJobsForUser(@RequestParam("userProfile") Integer userProfileId) throws NotFoundException {
+        List<JobDTO> jobDTOList = jobService.getJobsForUser(userProfileId);
+        return new ResponseEntity<>(jobDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping("/candidates-list")
+    public ResponseEntity<List<UserProfileDTO>> getUsersForJob(@RequestParam("job") Integer jobId) throws NotFoundException {
+        List<UserProfileDTO> userProfileDTOList = jobService.getUsersForJob(jobId);
+        return new ResponseEntity<>(userProfileDTOList, HttpStatus.OK);
     }
 
     @PatchMapping
