@@ -1,0 +1,61 @@
+package com.findJob.api;
+
+import com.findJob.dto.FeedbackDTO;
+import com.findJob.dto.JobDTO;
+import com.findJob.exception.BadRequestException;
+import com.findJob.exception.NotFoundException;
+import com.findJob.service.JobService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/job")
+public class JobController {
+
+    private JobService jobService;
+
+    public JobController(JobService jobService) {
+        this.jobService = jobService;
+    }
+
+    @PostMapping
+    public ResponseEntity<JobDTO> createJob(@RequestParam("employerProfile") Integer employerProfileId, @RequestBody JobDTO jobDTO) throws NotFoundException {
+        JobDTO job = jobService.createJob(employerProfileId, jobDTO);
+        return new ResponseEntity<>(job, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<JobDTO> getJob(@RequestParam("job") Integer jobId) throws NotFoundException {
+        JobDTO job = jobService.getJob(jobId);
+        return new ResponseEntity<>(job, HttpStatus.OK);
+    }
+
+    @PatchMapping
+    public ResponseEntity<JobDTO> updateJob(@RequestParam("job") Integer jobId, @RequestBody JobDTO jobDTO) throws NotFoundException {
+        JobDTO job = jobService.updateJob(jobId, jobDTO);
+        return new ResponseEntity<>(job, HttpStatus.OK);
+    }
+
+    @PostMapping("/new-candidate")
+    public ResponseEntity<JobDTO> applyToJob(@RequestParam("userProfile") Integer userProfileId, @RequestParam("job") Integer jobId) throws NotFoundException {
+        JobDTO job = jobService.applyToJob(userProfileId, jobId);
+        return new ResponseEntity<>(job, HttpStatus.OK);
+    }
+
+    @PostMapping("/report")
+    public ResponseEntity<JobDTO> reportJob(@RequestParam("job") Integer jobId, @RequestParam("user") Integer userId) throws NotFoundException {
+
+        JobDTO job = jobService.reportJob(jobId, userId);
+        return new ResponseEntity<>(job, HttpStatus.OK);
+    }
+
+    @GetMapping("/reports")
+    public ResponseEntity<List<JobDTO>> getAllJobReported() throws NotFoundException {
+
+        List<JobDTO> jobList = jobService.getAllJobReported();
+        return new ResponseEntity<>(jobList, HttpStatus.OK);
+    }
+}
