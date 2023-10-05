@@ -77,13 +77,6 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-//    @PatchMapping("/")
-//    public ResponseEntity<UserDTO> disableUser(@RequestParam("user") Integer userId) throws NotFoundException {
-//
-//        UserDTO user = userService.disableUser(userId);
-//        return new ResponseEntity<>(user, HttpStatus.OK);
-//    }
-
 
 
 }

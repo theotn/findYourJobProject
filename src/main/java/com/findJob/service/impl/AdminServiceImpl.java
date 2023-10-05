@@ -1,13 +1,17 @@
 package com.findJob.service.impl;
 
+import com.findJob.dto.AdminDTO;
 import com.findJob.dto.FeedbackDTO;
 import com.findJob.dto.UserDTO;
+import com.findJob.entity.Admin;
+import com.findJob.exception.NotFoundException;
 import com.findJob.repository.AdminRepository;
 import com.findJob.service.AdminService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -22,30 +26,24 @@ public class AdminServiceImpl implements AdminService {
 
     private AdminRepository adminRepository;
     private ModelMapper modelMapper;
-    private RestTemplate restTemplate;
+    private PasswordEncoder passwordEncoder;
 
-    public AdminServiceImpl(AdminRepository adminRepository, ModelMapper modelMapper, RestTemplate restTemplate) {
+    public AdminServiceImpl(AdminRepository adminRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
 
         this.adminRepository = adminRepository;
         this.modelMapper = modelMapper;
-        this.restTemplate = restTemplate;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public List<FeedbackDTO> getFeedbackReported() {
+    public AdminDTO login(AdminDTO adminDTO) throws NotFoundException {
 
-        FeedbackDTO[] feedbackDTOList = restTemplate.getForObject("http://localhost:9200/feedback/reports", FeedbackDTO[].class);
-        List<FeedbackDTO> list =  Arrays.asList(feedbackDTOList);
+        Admin admin = adminRepository.findByName(adminDTO.getName());
 
-        return list;
-    }
+        if (passwordEncoder.matches(adminDTO.getPassword(), admin.getPassword())) {
+            return modelMapper.map(admin, AdminDTO.class);
+        }
 
-    @Override
-    public UserDTO changeUserStatus(Integer userId, UserDTO userDTO) throws IOException {
-
-        HttpEntity<UserDTO> httpEntity = new HttpEntity<>(userDTO);
-        ResponseEntity<UserDTO> responseEntity = restTemplate.exchange("http://localhost:8000/user?user="+userId, HttpMethod.PUT, httpEntity, UserDTO.class);
-
-        return responseEntity.getBody();
+        throw new NotFoundException("The credentials provided are incorrect!");
     }
 }

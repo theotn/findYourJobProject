@@ -48,6 +48,13 @@ public class FeedbackController {
         return new ResponseEntity<>(feedback, HttpStatus.OK);
     }
 
+    @PatchMapping
+    public ResponseEntity<FeedbackDTO> updateFeedback(@RequestParam("feedback") Integer feedbackId, @RequestBody FeedbackDTO feedbackDTO) throws NotFoundException {
+
+        FeedbackDTO feedback = feedbackService.updateFeedback(feedbackId, feedbackDTO);
+        return new ResponseEntity<>(feedback, HttpStatus.OK);
+
+    }
     @DeleteMapping
     public ResponseEntity<FeedbackDTO> deleteFeedback(@RequestParam("feedback") Integer feedbackId, @RequestParam("user") Integer userId, @RequestParam("employerProfile") Integer employerProfileId) throws NotFoundException, BadRequestException {
 

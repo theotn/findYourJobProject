@@ -131,17 +131,6 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(user, UserDTO.class);
     }
 
-    //DE MODIFICAT
-//    @Override
-//    public UserDTO disableUser(Integer userId) throws NotFoundException {
-//
-//        Optional<User> userOptional = userRepository.findById(userId);
-//        User user = userOptional.orElseThrow(()-> new NotFoundException("User not found!"));
-//
-//        user.setIsActive(false0);
-//
-//        return modelMapper.map(user,UserDTO.class);
-//    }
 
 
 }

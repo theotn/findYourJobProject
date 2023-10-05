@@ -16,5 +16,7 @@ public interface FeedbackService {
 
     FeedbackDTO reportFeedback(Integer feedbackId, Integer userId) throws NotFoundException;
 
+    //updateFeedback
+    FeedbackDTO updateFeedback(Integer feedbackId, FeedbackDTO feedbackDTO) throws NotFoundException;
     FeedbackDTO deleteFeedback(Integer feedbackId, Integer userId, Integer employerProfileId) throws NotFoundException, BadRequestException;
 }
