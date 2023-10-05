@@ -59,11 +59,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         employerProfile.getFeedback().add(feedback);
 
-
-        FeedbackDTO feedbackReturned = modelMapper.map(feedback, FeedbackDTO.class);
-
-
-        return feedbackReturned;
+        return modelMapper.map(feedback, FeedbackDTO.class);
     }
 
     @Override

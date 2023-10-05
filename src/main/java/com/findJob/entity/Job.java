@@ -1,5 +1,6 @@
 package com.findJob.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.findJob.enums.LocationType;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -42,6 +43,7 @@ public class Job {
 //    private List<UserProfile> candidates;
 
     @OneToMany(mappedBy = "job")
+    @JsonIgnore
     private List<UserProfileJob> candidates;
 
     @ElementCollection

@@ -1,9 +1,9 @@
 package com.findJob.dto;
 
-import com.findJob.entity.User;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class CommentDTO {
@@ -12,5 +12,6 @@ public class CommentDTO {
     private LocalDate date;
     private String text;
     private Integer reports;
-    private User user;
+    private UserDTO user;
+    private List<UserDTO> userReportList;
 }
