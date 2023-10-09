@@ -5,18 +5,15 @@ import com.findJob.dto.UserDTO;
 import com.findJob.entity.EmployerProfile;
 import com.findJob.entity.Feedback;
 import com.findJob.entity.User;
-import com.findJob.entity.UserProfile;
 import com.findJob.exception.BadRequestException;
 import com.findJob.exception.NotFoundException;
 import com.findJob.repository.EmployerProfileRepository;
 import com.findJob.repository.FeedbackRepository;
 import com.findJob.repository.UserRepository;
-import com.findJob.service.EmployerProfileService;
 import com.findJob.service.FeedbackService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.*;

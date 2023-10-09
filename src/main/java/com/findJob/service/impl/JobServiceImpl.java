@@ -10,14 +10,16 @@ import com.findJob.exception.NotFoundException;
 import com.findJob.repository.*;
 import com.findJob.service.JobService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -80,6 +82,53 @@ public class JobServiceImpl implements JobService {
             jobDTOList.add(this.modelMapper.map(j, JobDTO.class));
         }
         return jobDTOList;
+    }
+
+    @Override
+    public Set<JobDTO> getRecommendations(Integer userProfileId, Integer number, Integer page) throws NotFoundException {
+
+        Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
+        UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
+
+        List<Job> jobs = new ArrayList<>();
+        Map<Job, Integer> map = new HashMap<>();
+
+        for(String skill: userProfile.getSkills()){
+            jobs.addAll(jobRepository.findBySkill(skill));
+        }
+
+        for(Job j: jobs){
+            if(map.containsKey(j)){
+                map.put(j, map.get(j)+1);
+            }else{
+                map.put(j,1);
+            }
+        }
+
+        Set<Job> sortedList = new LinkedHashSet<>();
+        map.entrySet().stream()
+                .sorted((k1, k2) -> -k1.getValue().compareTo(k2.getValue()))
+                .forEach(k -> sortedList.add(k.getKey()));
+
+        for(String domain: userProfile.getDomains()){
+            sortedList.addAll(jobRepository.findByDomain(domain));
+        }
+
+        Pageable pageable = PageRequest.of(0,5);
+
+        int max = Math.min(number * (page + 1), sortedList.size());
+
+        Page<Job> pageableList = new PageImpl<Job>(sortedList.stream().toList().subList(page*number, max), pageable, sortedList.size());
+
+        Set<JobDTO> jobDTOS = new LinkedHashSet<>();
+
+        for(Job j: pageableList){
+            jobDTOS.add(modelMapper.map(j,JobDTO.class));
+        }
+
+        if(jobDTOS.isEmpty()) throw new NotFoundException("Jobs not found!");
+
+        return jobDTOS;
     }
 
     @Override

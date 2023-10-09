@@ -8,12 +8,14 @@ import com.findJob.exception.BadRequestException;
 import com.findJob.exception.NotFoundException;
 
 import java.util.List;
+import java.util.Set;
 
 public interface JobService {
 
     JobDTO createJob(Integer employerProfileId, JobDTO jobDTO) throws NotFoundException;
     JobDTO getJob(Integer jobId) throws NotFoundException;
     List<JobDTO> getJobs(Integer employerProfileId) throws NotFoundException;
+    Set<JobDTO> getRecommendations(Integer userProfileId, Integer number, Integer page) throws NotFoundException;
     JobDTO updateJob(Integer jobId, JobDTO jobDTO) throws NotFoundException;
     JobDTO applyToJob(Integer userProfileId, Integer jobId) throws NotFoundException;
     List<JobDTO> getJobsForUser(Integer userProfileId) throws NotFoundException;

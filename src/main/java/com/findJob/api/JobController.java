@@ -3,6 +3,7 @@ package com.findJob.api;
 import com.findJob.dto.FeedbackDTO;
 import com.findJob.dto.JobDTO;
 import com.findJob.dto.UserProfileDTO;
+import com.findJob.entity.Job;
 import com.findJob.exception.BadRequestException;
 import com.findJob.exception.NotFoundException;
 import com.findJob.service.JobService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/job")
@@ -38,6 +40,12 @@ public class JobController {
     public ResponseEntity<List<JobDTO>> getJobs(@RequestParam("employerProfile") Integer employerProfileId) throws NotFoundException {
         List<JobDTO> jobDTOList = jobService.getJobs(employerProfileId);
         return new ResponseEntity<>(jobDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping("/recommendations")
+    public ResponseEntity<Set<JobDTO>> getRecommendations(@RequestParam("userProfile") Integer userProfileId, @RequestParam("page") Integer page, @RequestParam("number") Integer number) throws NotFoundException {
+        Set<JobDTO> jobs = jobService.getRecommendations(userProfileId, number, page);
+        return new ResponseEntity<>(jobs, HttpStatus.OK);
     }
 
     @GetMapping("/user-applied-list")
