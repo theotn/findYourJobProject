@@ -30,6 +30,7 @@ public class UserProfileJobServiceImpl implements UserProfileJobService {
 
 
     public UserProfileJobServiceImpl(UserProfileJobRepository userProfileJobRepository, UserProfileRepository userProfileRepository, JobRepository jobRepository, ModelMapper modelMapper) {
+
         this.userProfileJobRepository = userProfileJobRepository;
         this.userProfileRepository = userProfileRepository;
         this.jobRepository = jobRepository;

@@ -52,17 +52,17 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
     public EmployerProfileDTO getEmployerProfile(Integer userId) throws NotFoundException, BadRequestException {
 
         Optional<User> optionalUser = userRepository.findById(userId);
-        User user = optionalUser.orElseThrow(()->new NotFoundException("User not found!"));
+        User user = optionalUser.orElseThrow(() -> new NotFoundException("User not found!"));
 
-        if(!user.getIsActive()) throw new BadRequestException("This account is disabled!");
+        if (!user.getIsActive()) throw new BadRequestException("This account is disabled!");
 
         EmployerProfile employerProfile = employerProfileRepository.findByUser(user);
 
-        if(employerProfile == null) throw new NotFoundException("User not found!");
+        if (employerProfile == null) throw new NotFoundException("User not found!");
 
         List<FeedbackDTO> feedbackDTOList = new ArrayList<>();
 
-        for(Feedback f : employerProfile.getFeedback()) {
+        for (Feedback f : employerProfile.getFeedback()) {
             FeedbackDTO feedbackDTO = modelMapper.map(f, FeedbackDTO.class);
             feedbackDTOList.add(feedbackDTO);
         }
@@ -79,11 +79,14 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
         Optional<EmployerProfile> employerProfileOptional = employerProfileRepository.findById(employerProfileId);
         EmployerProfile employerProfile = employerProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
 
-        if(employerProfileDTO.getName() != null) employerProfile.setName(employerProfileDTO.getName());
-        if(employerProfileDTO.getHeadquarter() != null) employerProfile.setHeadquarter(employerProfileDTO.getHeadquarter());
-        if(employerProfileDTO.getDomain() != null) employerProfile.setDomain(employerProfileDTO.getDomain());
-        if(employerProfileDTO.getDescription() != null) employerProfile.setDescription(employerProfileDTO.getDescription());
-        if(employerProfileDTO.getNoOfEmployees() != null) employerProfile.setNoOfEmployees(employerProfileDTO.getNoOfEmployees());
+        if (employerProfileDTO.getName() != null) employerProfile.setName(employerProfileDTO.getName());
+        if (employerProfileDTO.getHeadquarter() != null)
+            employerProfile.setHeadquarter(employerProfileDTO.getHeadquarter());
+        if (employerProfileDTO.getDomain() != null) employerProfile.setDomain(employerProfileDTO.getDomain());
+        if (employerProfileDTO.getDescription() != null)
+            employerProfile.setDescription(employerProfileDTO.getDescription());
+        if (employerProfileDTO.getNoOfEmployees() != null)
+            employerProfile.setNoOfEmployees(employerProfileDTO.getNoOfEmployees());
 
         return modelMapper.map(employerProfile, EmployerProfileDTO.class);
     }

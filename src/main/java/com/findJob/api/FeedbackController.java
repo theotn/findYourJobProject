@@ -55,6 +55,7 @@ public class FeedbackController {
         return new ResponseEntity<>(feedback, HttpStatus.OK);
 
     }
+
     @DeleteMapping
     public ResponseEntity<FeedbackDTO> deleteFeedback(@RequestParam("feedback") Integer feedbackId, @RequestParam("user") Integer userId, @RequestParam("employerProfile") Integer employerProfileId) throws NotFoundException, BadRequestException {
 

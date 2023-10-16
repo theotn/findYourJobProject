@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController {
 
     private AdminService adminService;
-
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }

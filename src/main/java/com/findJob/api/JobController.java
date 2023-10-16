@@ -47,12 +47,6 @@ public class JobController {
         return new ResponseEntity<>(jobs, HttpStatus.OK);
     }
 
-    @GetMapping("/recommendations")
-    public ResponseEntity<Set<JobDTO>> getRecommendations(@RequestParam("userProfile") Integer userProfileId, @RequestParam("page") Integer page, @RequestParam("number") Integer number) throws NotFoundException {
-        Set<JobDTO> jobs = jobService.getRecommendations(userProfileId, number, page);
-        return new ResponseEntity<>(jobs, HttpStatus.OK);
-    }
-
     @GetMapping("/user-applied-list")
     public ResponseEntity<List<JobDTO>> getJobsForUser(@RequestParam("userProfile") Integer userProfileId) throws NotFoundException {
         List<JobDTO> jobDTOList = jobService.getJobsForUser(userProfileId);

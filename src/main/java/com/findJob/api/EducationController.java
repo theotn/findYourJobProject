@@ -32,9 +32,9 @@ public class EducationController {
     }
 
     @PatchMapping
-    public ResponseEntity<EducationDTO> updateEducation(@RequestParam("education") Integer educationId,@RequestBody EducationDTO educationDTO) throws NotFoundException {
+    public ResponseEntity<EducationDTO> updateEducation(@RequestParam("education") Integer educationId, @RequestBody EducationDTO educationDTO) throws NotFoundException {
 
-        EducationDTO education = educationService.updateEducation(educationId,educationDTO);
+        EducationDTO education = educationService.updateEducation(educationId, educationDTO);
         return new ResponseEntity<>(education, HttpStatus.OK);
     }
 

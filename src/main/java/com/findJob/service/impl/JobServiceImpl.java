@@ -1,11 +1,9 @@
 package com.findJob.service.impl;
 
-import com.findJob.dto.FeedbackDTO;
 import com.findJob.dto.JobDTO;
 import com.findJob.dto.UserDTO;
 import com.findJob.dto.UserProfileDTO;
 import com.findJob.entity.*;
-import com.findJob.exception.BadRequestException;
 import com.findJob.exception.NotFoundException;
 import com.findJob.repository.*;
 import com.findJob.service.JobService;
@@ -77,7 +75,7 @@ public class JobServiceImpl implements JobService {
 
         List<Job> jobList = jobRepository.findByEmployerProfile(employerProfile);
         List<JobDTO> jobDTOList = new ArrayList<>();
-        for(Job j : jobList){
+        for (Job j : jobList) {
             jobDTOList.add(this.modelMapper.map(j, JobDTO.class));
         }
         return jobDTOList;
@@ -92,15 +90,15 @@ public class JobServiceImpl implements JobService {
         List<Job> jobs = new ArrayList<>();
         Map<Job, Integer> map = new HashMap<>();
 
-        for(String skill: userProfile.getSkills()){
+        for (String skill : userProfile.getSkills()) {
             jobs.addAll(jobRepository.findBySkill(skill));
         }
 
-        for(Job j: jobs){
-            if(map.containsKey(j)){
-                map.put(j, map.get(j)+1);
-            }else{
-                map.put(j,1);
+        for (Job j : jobs) {
+            if (map.containsKey(j)) {
+                map.put(j, map.get(j) + 1);
+            } else {
+                map.put(j, 1);
             }
         }
 
@@ -109,23 +107,23 @@ public class JobServiceImpl implements JobService {
                 .sorted((k1, k2) -> -k1.getValue().compareTo(k2.getValue()))
                 .forEach(k -> sortedList.add(k.getKey()));
 
-        for(String domain: userProfile.getDomains()){
+        for (String domain : userProfile.getDomains()) {
             sortedList.addAll(jobRepository.findByDomain(domain));
         }
 
-        Pageable pageable = PageRequest.of(0,5);
+        Pageable pageable = PageRequest.of(0, 5);
 
         int max = Math.min(number * (page + 1), sortedList.size());
 
-        Page<Job> pageableList = new PageImpl<Job>(sortedList.stream().toList().subList(page*number, max), pageable, sortedList.size());
+        Page<Job> pageableList = new PageImpl<Job>(sortedList.stream().toList().subList(page * number, max), pageable, sortedList.size());
 
         Set<JobDTO> jobDTOS = new LinkedHashSet<>();
 
-        for(Job j: pageableList){
-            jobDTOS.add(modelMapper.map(j,JobDTO.class));
+        for (Job j : pageableList) {
+            jobDTOS.add(modelMapper.map(j, JobDTO.class));
         }
 
-        if(jobDTOS.isEmpty()) throw new NotFoundException("Jobs not found!");
+        if (jobDTOS.isEmpty()) throw new NotFoundException("Jobs not found!");
 
         return jobDTOS;
     }
@@ -136,17 +134,17 @@ public class JobServiceImpl implements JobService {
         Optional<Job> jobOptional = jobRepository.findById(jobId);
         Job job = jobOptional.orElseThrow(() -> new NotFoundException("Job not found!"));
 
-        if(jobDTO.getTitle() != null) job.setTitle(jobDTO.getTitle());
-        if(jobDTO.getExperienceLevel() != null) job.setExperienceLevel(jobDTO.getExperienceLevel());
-        if(jobDTO.getLocationType() != null) job.setLocationType(jobDTO.getLocationType());
-        if(jobDTO.getAddress() != null) job.setAddress(jobDTO.getAddress());
-        if(jobDTO.getEmploymentType() != null) job.setEmploymentType(jobDTO.getEmploymentType());
-        if(jobDTO.getSkills() != null) job.setSkills(jobDTO.getSkills());
-        if(jobDTO.getDescription() != null) job.setDescription(jobDTO.getDescription());
-        if(jobDTO.getIsActive() != null) {
+        if (jobDTO.getTitle() != null) job.setTitle(jobDTO.getTitle());
+        if (jobDTO.getExperienceLevel() != null) job.setExperienceLevel(jobDTO.getExperienceLevel());
+        if (jobDTO.getLocationType() != null) job.setLocationType(jobDTO.getLocationType());
+        if (jobDTO.getAddress() != null) job.setAddress(jobDTO.getAddress());
+        if (jobDTO.getEmploymentType() != null) job.setEmploymentType(jobDTO.getEmploymentType());
+        if (jobDTO.getSkills() != null) job.setSkills(jobDTO.getSkills());
+        if (jobDTO.getDescription() != null) job.setDescription(jobDTO.getDescription());
+        if (jobDTO.getIsActive() != null) {
             job.setIsActive(jobDTO.getIsActive());
-            if(!jobDTO.getIsActive()) {
-                for(UserProfileJob userProfileJob : job.getCandidates()){
+            if (!jobDTO.getIsActive()) {
+                for (UserProfileJob userProfileJob : job.getCandidates()) {
                     userProfileJobRepository.delete(userProfileJob);
                 }
             }
@@ -188,7 +186,7 @@ public class JobServiceImpl implements JobService {
 
         List<JobDTO> jobDTOList = new ArrayList<>();
 
-        for(UserProfileJob u : userProfileJobList){
+        for (UserProfileJob u : userProfileJobList) {
             Optional<Job> optionalJob = jobRepository.findById(u.getJob().getId());
             Job job = optionalJob.orElseThrow(() -> new NotFoundException("Job not found!"));
 
@@ -205,7 +203,7 @@ public class JobServiceImpl implements JobService {
 
         List<UserProfileJob> userProfileJobList = userProfileJobRepository.findByJob(job);
         List<UserProfileDTO> userProfileDTOList = new ArrayList<>();
-        for(UserProfileJob u : userProfileJobList){
+        for (UserProfileJob u : userProfileJobList) {
             Optional<UserProfile> userProfileOptional = userProfileRepository.findById(u.getUserProfile().getId());
             UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("UserProfile not found!"));
             userProfileDTOList.add(this.modelMapper.map(userProfile, UserProfileDTO.class));
@@ -221,7 +219,7 @@ public class JobServiceImpl implements JobService {
 
         job.setReports(job.getReports() + 1);
 
-        if(job.getUserReportList().contains(userId))
+        if (job.getUserReportList().contains(userId))
             throw new NotFoundException("This job has already been reported!");
         else job.getUserReportList().add(userId);
 
@@ -245,8 +243,8 @@ public class JobServiceImpl implements JobService {
             for (Integer i : j.getUserReportList()) {
 
                 Optional<User> userOptional = userRepository.findById(i);
-                User user = userOptional.orElseThrow(()->new NotFoundException("User not found!"));
-                userDTOS.add(modelMapper.map(user,UserDTO.class));
+                User user = userOptional.orElseThrow(() -> new NotFoundException("User not found!"));
+                userDTOS.add(modelMapper.map(user, UserDTO.class));
             }
             jobDTO.setUserReportList(userDTOS);
 

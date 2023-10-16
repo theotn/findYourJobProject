@@ -43,10 +43,10 @@ public class FeedbackServiceImpl implements FeedbackService {
         Feedback feedback = modelMapper.map(feedbackDTO, Feedback.class);
 
         Optional<User> userOptional = userRepository.findById(userId);
-        User user = userOptional.orElseThrow(()-> new NotFoundException("User not found!"));
+        User user = userOptional.orElseThrow(() -> new NotFoundException("User not found!"));
 
         Optional<EmployerProfile> employerProfileOptional = employerProfileRepository.findById(employerProfileId);
-        EmployerProfile employerProfile = employerProfileOptional.orElseThrow(()-> new NotFoundException("Profile not found!"));
+        EmployerProfile employerProfile = employerProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
 
         feedback.setDate(LocalDate.now());
         feedback.setReports(0);
@@ -84,8 +84,8 @@ public class FeedbackServiceImpl implements FeedbackService {
             for (Integer i : f.getUserReportList()) {
 
                 Optional<User> userOptional = userRepository.findById(i);
-                User user = userOptional.orElseThrow(()->new NotFoundException("User not found!"));
-                userDTOS.add(modelMapper.map(user,UserDTO.class));
+                User user = userOptional.orElseThrow(() -> new NotFoundException("User not found!"));
+                userDTOS.add(modelMapper.map(user, UserDTO.class));
             }
             feedbackDTO.setUserReportList(userDTOS);
 
@@ -116,8 +116,8 @@ public class FeedbackServiceImpl implements FeedbackService {
         Optional<Feedback> feedbackOptional = feedbackRepository.findById(feedbackId);
         Feedback feedback = feedbackOptional.orElseThrow(() -> new NotFoundException("Not found!"));
 
-        if(feedbackDTO.getDescription() != null) feedback.setDescription(feedbackDTO.getDescription());
-        if(feedbackDTO.getStars() != null) feedback.setStars(feedbackDTO.getStars());
+        if (feedbackDTO.getDescription() != null) feedback.setDescription(feedbackDTO.getDescription());
+        if (feedbackDTO.getStars() != null) feedback.setStars(feedbackDTO.getStars());
 
         return modelMapper.map(feedback, FeedbackDTO.class);
     }
@@ -131,7 +131,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         Optional<User> userOptional = userRepository.findById(userId);
         User user = userOptional.orElseThrow(() -> new NotFoundException("User Not found!"));
 
-        if(feedback.getUser()==user) {
+        if (feedback.getUser() == user) {
 
             Optional<EmployerProfile> employerProfileOptional = employerProfileRepository.findById(employerProfileId);
             EmployerProfile employerProfile = employerProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));

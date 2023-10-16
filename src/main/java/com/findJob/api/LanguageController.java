@@ -32,9 +32,9 @@ public class LanguageController {
     }
 
     @PatchMapping
-    public ResponseEntity<LanguageDTO> updateLanguage(@RequestParam("language") Integer languageId,@RequestBody LanguageDTO languageDTO) throws NotFoundException {
+    public ResponseEntity<LanguageDTO> updateLanguage(@RequestParam("language") Integer languageId, @RequestBody LanguageDTO languageDTO) throws NotFoundException {
 
-        LanguageDTO education = languageService.updateLanguage(languageId,languageDTO);
+        LanguageDTO education = languageService.updateLanguage(languageId, languageDTO);
         return new ResponseEntity<>(education, HttpStatus.OK);
     }
 

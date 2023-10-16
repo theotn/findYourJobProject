@@ -44,7 +44,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
-    public UserProfileDTO createUserProfile(UserDTO userDTO){
+    public UserProfileDTO createUserProfile(UserDTO userDTO) {
 
         User user = modelMapper.map(userDTO, User.class);
 
@@ -60,9 +60,9 @@ public class UserProfileServiceImpl implements UserProfileService {
     public UserProfileDTO getUserProfile(Integer userId) throws NotFoundException, BadRequestException {
 
         Optional<User> optionalUser = userRepository.findById(userId);
-        User user = optionalUser.orElseThrow(()->new NotFoundException("User not found!"));
+        User user = optionalUser.orElseThrow(() -> new NotFoundException("User not found!"));
 
-        if(!user.getIsActive()) throw new BadRequestException("This account is disabled!");
+        if (!user.getIsActive()) throw new BadRequestException("This account is disabled!");
 
         UserProfile userProfile = userProfileRepository.findByUser(user);
 
@@ -117,11 +117,11 @@ public class UserProfileServiceImpl implements UserProfileService {
         if (userProfileDTO.getCity() != null) userProfile.setCity(userProfileDTO.getCity());
         if (userProfileDTO.getDescription() != null) userProfile.setDescription(userProfileDTO.getDescription());
 
-        if (userProfileDTO.getSkills()!=null) {
+        if (userProfileDTO.getSkills() != null) {
 
             userProfile.setSkills(userProfileDTO.getSkills());
         }
-        if (userProfileDTO.getDomains()!=null) {
+        if (userProfileDTO.getDomains() != null) {
 
             userProfile.setDomains(userProfileDTO.getDomains());
         }
