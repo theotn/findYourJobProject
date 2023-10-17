@@ -41,7 +41,9 @@ public class AdminServiceImpl implements AdminService {
         Admin admin = adminRepository.findByName(adminDTO.getName());
 
         if (passwordEncoder.matches(adminDTO.getPassword(), admin.getPassword())) {
-            return modelMapper.map(admin, AdminDTO.class);
+            AdminDTO adminReturned = modelMapper.map(admin, AdminDTO.class);
+            adminReturned.setPassword(null);
+            return adminReturned;
         }
 
         throw new NotFoundException("The credentials provided are incorrect!");

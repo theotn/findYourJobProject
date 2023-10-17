@@ -30,13 +30,12 @@ public class UserController {
 
     private EmployerProfileService employerProfileService;
 
-    private RestTemplate restTemplate;
 
-    public UserController(UserService userService, UserProfileService userProfileService, EmployerProfileService employerProfileService, RestTemplate restTemplate) {
+    public UserController(UserService userService, UserProfileService userProfileService, EmployerProfileService employerProfileService) {
+
         this.userService = userService;
         this.userProfileService = userProfileService;
         this.employerProfileService = employerProfileService;
-        this.restTemplate = restTemplate;
     }
 
     @PostMapping("/signUp")

@@ -9,8 +9,10 @@ import java.time.LocalDateTime;
 public class UserProfileJobDTO {
 
     private Integer id;
-    private UserProfile userProfile;
-    private Job job;
-    private LocalDateTime dateTime;
 
+    private UserProfile userProfile;
+
+    private Job job;
+
+    private LocalDateTime dateTime;
 }

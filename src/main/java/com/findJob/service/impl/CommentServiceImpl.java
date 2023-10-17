@@ -32,6 +32,7 @@ public class CommentServiceImpl implements CommentService {
     private ModelMapper modelMapper;
 
     public CommentServiceImpl(CommentRepository commentRepository, UserRepository userRepository, JobRepository jobRepository, ModelMapper modelMapper) {
+
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.jobRepository = jobRepository;
@@ -61,6 +62,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDTO getComment(Integer commentId) throws NotFoundException {
+
         Optional<Comment> commentOptional = commentRepository.findById(commentId);
         Comment comment = commentOptional.orElseThrow(() -> new NotFoundException("Not found!"));
 
@@ -69,6 +71,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDTO> getAllCommentsReported() throws NotFoundException {
+
         List<Comment> commentList = commentRepository.getAllCommentReported();
         List<CommentDTO> commentDTOList = new ArrayList<>();
 
@@ -88,6 +91,7 @@ public class CommentServiceImpl implements CommentService {
 
             commentDTOList.add(commentDTO);
         }
+
         return commentDTOList;
     }
 
@@ -107,6 +111,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDTO updateComment(Integer commentId, CommentDTO commentDTO) throws NotFoundException {
+
         Optional<Comment> commentOptional = commentRepository.findById(commentId);
         Comment comment = commentOptional.orElseThrow(() -> new NotFoundException("Not found!"));
 
@@ -118,6 +123,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDTO deleteComment(Integer commentId, Integer userId, Integer jobId) throws NotFoundException, BadRequestException {
+
         Optional<Comment> commentOptional = commentRepository.findById(commentId);
         Comment comment = commentOptional.orElseThrow(() -> new NotFoundException("Not found!"));
 

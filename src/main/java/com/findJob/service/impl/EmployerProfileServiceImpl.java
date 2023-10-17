@@ -23,14 +23,12 @@ import java.util.*;
 public class EmployerProfileServiceImpl implements EmployerProfileService {
 
     private EmployerProfileRepository employerProfileRepository;
-    private RestTemplate restTemplate;
     private ModelMapper modelMapper;
     private UserRepository userRepository;
 
-    public EmployerProfileServiceImpl(EmployerProfileRepository employerProfileRepository, RestTemplate restTemplate, ModelMapper modelMapper, UserRepository userRepository) {
+    public EmployerProfileServiceImpl(EmployerProfileRepository employerProfileRepository, ModelMapper modelMapper, UserRepository userRepository) {
 
         this.employerProfileRepository = employerProfileRepository;
-        this.restTemplate = restTemplate;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
     }
@@ -91,17 +89,4 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
         return modelMapper.map(employerProfile, EmployerProfileDTO.class);
     }
 
-//    @Override
-//    public FeedbackDTO addFeedbackToProfile(Integer userId, Integer employerProfileId, FeedbackDTO feedbackDTO) throws NotFoundException {
-//
-//        Optional<EmployerProfile> employerProfileOptional = employerProfileRepository.findById(employerProfileId);
-//        EmployerProfile employerProfile = employerProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
-//
-//        Map<String, Integer> params = new HashMap<>();
-//        params.put("user", userId);
-//        FeedbackDTO feedback = restTemplate.postForObject("http://localhost:9200/feedback?user={user}", feedbackDTO, FeedbackDTO.class, params);
-//        employerProfile.getFeedback().add(modelMapper.map(feedback, Feedback.class));
-//
-//        return feedback;
-//    }
 }

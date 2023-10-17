@@ -10,7 +10,10 @@ import java.util.Map;
 public interface UserProfileJobService {
 
     void createInterview(Integer userProfileId, Integer jobId, Map<String, LocalDateTime> updates) throws NotFoundException;
+
     void acceptInterview(Integer userProfileId, Integer jobId) throws NotFoundException;
+
     List<UserProfileJobDTO> getInterviewsForEmployer(Integer jobId) throws NotFoundException;
+
     List<UserProfileJobDTO> getInterviewsForUser(Integer userProfileId) throws NotFoundException;
 }

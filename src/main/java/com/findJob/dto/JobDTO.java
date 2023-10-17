@@ -18,22 +18,28 @@ public class JobDTO {
     private Integer id;
 
     private String title;
+
     private LocalDate date;
+
     private String experienceLevel;
+
     @Enumerated(value = EnumType.STRING)
     private LocationType locationType;
+
     private String address;
+
     private String employmentType;
+
     private List<String> skills;
+
     private String description;
+
     private List<Comment> comments;
+
     private Integer noOfCandidates;
+
     private Boolean isActive;
+
     private List<UserDTO> userReportList;
 
-
-//    private Boolean isActive;
-//    private Integer reports;
-//    @OneToMany(mappedBy = "job")
-//    private List<UserProfileJob> candidates;
 }

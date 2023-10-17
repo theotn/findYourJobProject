@@ -25,5 +25,4 @@ public class Certification {
     private LocalDate expirationDate;
 
     private String city;
-
 }

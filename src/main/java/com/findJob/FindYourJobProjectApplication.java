@@ -14,51 +14,46 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class FindYourJobProjectApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(FindYourJobProjectApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(FindYourJobProjectApplication.class, args);
+    }
 
-	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
-	}
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	public RestTemplate restTemplate(){
-		return new RestTemplate();
-	}
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(authorize -> {
+                    try {
+                        authorize.requestMatchers("/**")
+                                .permitAll()
+                                .anyRequest().authenticated()
+                                .and()
+                                .formLogin(formLogin -> {
+                                    try {
+                                        formLogin.init(http);
+                                    } catch (Exception e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                })
+                                .httpBasic(HttbBasic -> HttbBasic.init(http));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http
-				.authorizeHttpRequests(authorize -> {
-					try {
-						authorize.requestMatchers("/**")
-								.permitAll()
-								.anyRequest().authenticated()
-								.and()
-								.formLogin(formLogin -> {
-									try {
-										formLogin.init(http);
-									} catch (Exception e) {
-										throw new RuntimeException(e);
-									}
-								})
-								.httpBasic(HttbBasic -> HttbBasic.init(http));
-					} catch (Exception e) {
-						throw new RuntimeException(e);
-					}
-				});
+        http.csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable);
 
-		http.csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable);
+        return http.build();
 
-		return http.build();
-
-	}
+    }
 
 }

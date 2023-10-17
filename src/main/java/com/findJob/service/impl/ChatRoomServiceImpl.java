@@ -26,6 +26,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private ModelMapper modelMapper;
 
     public ChatRoomServiceImpl(ChatRoomRepository chatRoomRepository, UserRepository userRepository, ModelMapper modelMapper) {
+
         this.chatRoomRepository = chatRoomRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
@@ -35,18 +36,17 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     @Override
     public ChatRoom openChatRoom(Integer userId1, Integer userId2) throws NotFoundException, BadRequestException {
 
-
         Optional<User> userOptional1 = userRepository.findById(userId1);
-        User user1 = userOptional1.orElseThrow(()-> new NotFoundException("User not found!"));
+        User user1 = userOptional1.orElseThrow(() -> new NotFoundException("User not found!"));
 
         Optional<User> userOptional2 = userRepository.findById(userId2);
-        User user2 = userOptional2.orElseThrow(()-> new NotFoundException("User not found!"));
+        User user2 = userOptional2.orElseThrow(() -> new NotFoundException("User not found!"));
 
         List<ChatRoom> chatRoomList = chatRoomRepository.findByUser(user1);
-        chatRoomList.forEach(x-> System.out.println(x));
+        chatRoomList.forEach(x -> System.out.println(x));
 
-        for(ChatRoom c: chatRoomList){
-            if(c.getUsers().contains(user2))  return c;
+        for (ChatRoom c : chatRoomList) {
+            if (c.getUsers().contains(user2)) return c;
         }
 
         List<User> list = new ArrayList<>();
@@ -65,7 +65,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     public List<ChatRoom> getChatRooms(Integer userId) throws NotFoundException {
 
         Optional<User> userOptional = userRepository.findById(userId);
-        User user = userOptional.orElseThrow(()-> new NotFoundException("User not found!"));
+        User user = userOptional.orElseThrow(() -> new NotFoundException("User not found!"));
 
         return chatRoomRepository.findByUser(user);
     }

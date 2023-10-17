@@ -18,12 +18,11 @@ import java.util.Optional;
 public class LanguageServiceImpl implements LanguageService {
 
     private LanguageRepository languageRepository;
-
     private ModelMapper modelMapper;
-
     private UserProfileRepository userProfileRepository;
 
     public LanguageServiceImpl(LanguageRepository languageRepository, ModelMapper modelMapper, UserProfileRepository userProfileRepository) {
+
         this.languageRepository = languageRepository;
         this.modelMapper = modelMapper;
         this.userProfileRepository = userProfileRepository;

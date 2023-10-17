@@ -24,6 +24,7 @@ public class EducationServiceImpl implements EducationService {
     private UserProfileRepository userProfileRepository;
 
     public EducationServiceImpl(EducationRepository educationRepository, ModelMapper modelMapper, UserProfileRepository userProfileRepository) {
+
         this.educationRepository = educationRepository;
         this.modelMapper = modelMapper;
         this.userProfileRepository = userProfileRepository;

@@ -22,9 +22,9 @@ public class MessageController {
     }
 
     @PostMapping
-    public ResponseEntity<Message> sendMessage(@RequestParam("chatRoom") Integer chatRoomId, @RequestParam("user") Integer userId, @RequestBody Map<String,String> message) throws NotFoundException {
+    public ResponseEntity<Message> sendMessage(@RequestParam("chatRoom") Integer chatRoomId, @RequestParam("user") Integer userId, @RequestBody Map<String, String> message) throws NotFoundException {
 
-        Message m = messageService.sendMessage(chatRoomId,userId,message.get("message"));
+        Message m = messageService.sendMessage(chatRoomId, userId, message.get("message"));
         return new ResponseEntity<>(m, HttpStatus.CREATED);
     }
 

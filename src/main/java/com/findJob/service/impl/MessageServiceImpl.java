@@ -20,12 +20,11 @@ import java.util.Optional;
 public class MessageServiceImpl implements MessageService {
 
     private MessageRepository messageRepository;
-
     private ChatRoomRepository chatRoomRepository;
-
     private UserRepository userRepository;
 
     public MessageServiceImpl(MessageRepository messageRepository, ChatRoomRepository chatRoomRepository, UserRepository userRepository) {
+
         this.messageRepository = messageRepository;
         this.chatRoomRepository = chatRoomRepository;
         this.userRepository = userRepository;

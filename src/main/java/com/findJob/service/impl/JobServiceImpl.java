@@ -30,6 +30,7 @@ public class JobServiceImpl implements JobService {
     private EmployerProfileRepository employerProfileRepository;
 
     public JobServiceImpl(JobRepository jobRepository, UserProfileRepository userProfileRepository, UserProfileJobRepository userProfileJobRepository, UserRepository userRepository, ModelMapper modelMapper, EmployerProfileRepository employerProfileRepository) {
+
         this.jobRepository = jobRepository;
         this.userProfileRepository = userProfileRepository;
         this.userProfileJobRepository = userProfileJobRepository;
@@ -70,6 +71,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public List<JobDTO> getJobs(Integer employerProfileId) throws NotFoundException {
+
         Optional<EmployerProfile> employerProfileOptional = employerProfileRepository.findById(employerProfileId);
         EmployerProfile employerProfile = employerProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
 
@@ -179,6 +181,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public List<JobDTO> getJobsForUser(Integer userProfileId) throws NotFoundException {
+
         Optional<UserProfile> userProfileOptional = userProfileRepository.findById(userProfileId);
         UserProfile userProfile = userProfileOptional.orElseThrow(() -> new NotFoundException("Profile not found!"));
 
@@ -198,6 +201,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public List<UserProfileDTO> getUsersForJob(Integer jobId) throws NotFoundException {
+
         Optional<Job> jobOptional = jobRepository.findById(jobId);
         Job job = jobOptional.orElseThrow(() -> new NotFoundException("Job not found!"));
 

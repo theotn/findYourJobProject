@@ -24,7 +24,7 @@ public class ChatRoomController {
     @PostMapping
     public ResponseEntity<ChatRoom> openChatRoom(@RequestParam("user1") Integer user1, @RequestParam("user2") Integer user2) throws NotFoundException, BadRequestException {
 
-        ChatRoom chatRoom = chatRoomService.openChatRoom(user1,user2);
+        ChatRoom chatRoom = chatRoomService.openChatRoom(user1, user2);
         return new ResponseEntity<>(chatRoom, HttpStatus.CREATED);
     }
 
@@ -34,5 +34,5 @@ public class ChatRoomController {
         List<ChatRoom> chatRooms = chatRoomService.getChatRooms(user);
         return new ResponseEntity<>(chatRooms, HttpStatus.CREATED);
     }
- }
+}
 

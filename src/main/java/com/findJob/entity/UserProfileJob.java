@@ -26,5 +26,4 @@ public class UserProfileJob {
     private LocalDateTime dateTime;
 
     private Boolean userAccept = false;
-
 }

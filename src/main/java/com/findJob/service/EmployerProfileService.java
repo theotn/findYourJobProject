@@ -11,7 +11,4 @@ public interface EmployerProfileService {
     EmployerProfileDTO createEmployerProfile(UserDTO userDTO);
     EmployerProfileDTO getEmployerProfile(Integer userId) throws NotFoundException, BadRequestException;
     EmployerProfileDTO updateEmployerProfile(Integer employerProfileId, EmployerProfileDTO employerProfileDTO) throws NotFoundException;
-   // FeedbackDTO addFeedbackToProfile(Integer userId, Integer employerProfileId, FeedbackDTO feedbackDTO) throws NotFoundException;
-
-    //de adaugat DEZACTIVAREA
 }

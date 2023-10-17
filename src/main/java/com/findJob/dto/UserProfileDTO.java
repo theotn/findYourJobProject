@@ -9,12 +9,19 @@ import java.util.List;
 public class UserProfileDTO {
 
     private Integer id;
+
     private String name;
+
     private String phoneNo;
+
     private LocalDate dateOfBirth;
+
     private String city;
+
     private String description;
+
     private List<String> skills;
+
     private List<String> domains;
 
     private List<ExperienceDTO> experienceDTO;
@@ -25,7 +32,4 @@ public class UserProfileDTO {
 
     private List<LanguageDTO> languageDTO;
 
-//    private List<UserProfileJob> jobs;
-//
-//    private User user;
 }

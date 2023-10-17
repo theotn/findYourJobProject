@@ -11,7 +11,6 @@ import java.util.List;
 public interface UserProfileJobRepository extends JpaRepository<UserProfileJob, Integer> {
 
     List<UserProfileJob> findByUserProfile(UserProfile userProfile);
-
     List<UserProfileJob> findByJob(Job job);
     UserProfileJob findByUserProfileAndJob(UserProfile userProfile, Job job);
     @Query("SELECT u FROM UserProfileJob u WHERE u.job= :job AND u.userAccept = true")

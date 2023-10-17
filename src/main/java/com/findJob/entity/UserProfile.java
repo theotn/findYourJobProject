@@ -16,9 +16,13 @@ public class UserProfile {
     private Integer id;
 
     private String name;
+
     private String phoneNo;
+
     private LocalDate dateOfBirth;
+
     private String city;
+
     private String description;
 
     @ElementCollection
@@ -46,6 +50,4 @@ public class UserProfile {
     @OneToOne
     @JoinColumn(name = "user")
     private User user;
-
-
 }

@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController {
 
     private AdminService adminService;
+
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
 
-    @PostMapping
+    @PostMapping("/login")
     public ResponseEntity<AdminDTO> login(@RequestBody AdminDTO adminDTO) throws NotFoundException {
 
         AdminDTO admin = adminService.login(adminDTO);
         return new ResponseEntity<>(admin, HttpStatus.OK);
-
     }
 }

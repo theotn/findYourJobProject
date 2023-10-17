@@ -34,10 +34,4 @@ public class EmployerProfileController {
         return new ResponseEntity<>(employerProfile, HttpStatus.OK);
     }
 
-//    @PostMapping("/feedback")
-//    public ResponseEntity<FeedbackDTO> addFeedbackToProfile(@RequestParam("user") Integer userId, @RequestParam("profile") Integer profileId, @RequestBody FeedbackDTO feedbackDTO) throws NotFoundException {
-//
-//        FeedbackDTO feedback = employerProfileService.addFeedbackToProfile(userId, profileId, feedbackDTO);
-//        return new ResponseEntity<>(feedback, HttpStatus.OK);
-//    }
 }

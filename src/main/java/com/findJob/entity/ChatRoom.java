@@ -22,5 +22,4 @@ public class ChatRoom {
     )
     private List<User> users;
 
-
 }

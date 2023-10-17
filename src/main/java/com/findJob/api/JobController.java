@@ -26,47 +26,56 @@ public class JobController {
 
     @PostMapping
     public ResponseEntity<JobDTO> createJob(@RequestParam("employerProfile") Integer employerProfileId, @RequestBody JobDTO jobDTO) throws NotFoundException {
+
         JobDTO job = jobService.createJob(employerProfileId, jobDTO);
         return new ResponseEntity<>(job, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<JobDTO> getJob(@RequestParam("job") Integer jobId) throws NotFoundException {
+
         JobDTO job = jobService.getJob(jobId);
         return new ResponseEntity<>(job, HttpStatus.OK);
     }
 
     @GetMapping("/employer")
     public ResponseEntity<List<JobDTO>> getJobs(@RequestParam("employerProfile") Integer employerProfileId) throws NotFoundException {
+
         List<JobDTO> jobDTOList = jobService.getJobs(employerProfileId);
         return new ResponseEntity<>(jobDTOList, HttpStatus.OK);
     }
+
     @GetMapping("/recommendations")
     public ResponseEntity<Set<JobDTO>> getRecommendations(@RequestParam("userProfile") Integer userProfileId, @RequestParam("page") Integer page, @RequestParam("number") Integer number) throws NotFoundException {
+
         Set<JobDTO> jobs = jobService.getRecommendations(userProfileId,number,page);
         return new ResponseEntity<>(jobs, HttpStatus.OK);
     }
 
     @GetMapping("/user-applied-list")
     public ResponseEntity<List<JobDTO>> getJobsForUser(@RequestParam("userProfile") Integer userProfileId) throws NotFoundException {
+
         List<JobDTO> jobDTOList = jobService.getJobsForUser(userProfileId);
         return new ResponseEntity<>(jobDTOList, HttpStatus.OK);
     }
 
     @GetMapping("/candidates-list")
     public ResponseEntity<List<UserProfileDTO>> getUsersForJob(@RequestParam("job") Integer jobId) throws NotFoundException {
+
         List<UserProfileDTO> userProfileDTOList = jobService.getUsersForJob(jobId);
         return new ResponseEntity<>(userProfileDTOList, HttpStatus.OK);
     }
 
     @PatchMapping
     public ResponseEntity<JobDTO> updateJob(@RequestParam("job") Integer jobId, @RequestBody JobDTO jobDTO) throws NotFoundException {
+
         JobDTO job = jobService.updateJob(jobId, jobDTO);
         return new ResponseEntity<>(job, HttpStatus.OK);
     }
 
     @PostMapping("/new-candidate")
     public ResponseEntity<JobDTO> applyToJob(@RequestParam("userProfile") Integer userProfileId, @RequestParam("job") Integer jobId) throws NotFoundException {
+
         JobDTO job = jobService.applyToJob(userProfileId, jobId);
         return new ResponseEntity<>(job, HttpStatus.OK);
     }

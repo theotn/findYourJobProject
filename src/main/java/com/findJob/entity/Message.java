@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Entity
 public class Message {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -25,5 +24,4 @@ public class Message {
 
     private String content;
     private LocalDateTime timestamp;
-
 }

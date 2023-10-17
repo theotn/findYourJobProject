@@ -13,5 +13,4 @@ public interface LanguageService {
 
     LanguageDTO deleteLanguage(Integer userProfileId, Integer languageId) throws NotFoundException;
 
-
 }

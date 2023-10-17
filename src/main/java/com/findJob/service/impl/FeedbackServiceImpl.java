@@ -24,9 +24,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     private FeedbackRepository feedbackRepository;
     private ModelMapper modelMapper;
-
     private UserRepository userRepository;
-
     private EmployerProfileRepository employerProfileRepository;
 
     public FeedbackServiceImpl(FeedbackRepository feedbackRepository, ModelMapper modelMapper, UserRepository userRepository, EmployerProfileRepository employerProfileRepository) {

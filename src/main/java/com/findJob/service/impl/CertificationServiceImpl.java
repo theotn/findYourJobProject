@@ -24,6 +24,7 @@ public class CertificationServiceImpl implements CertificationService {
     private UserProfileRepository userProfileRepository;
 
     public CertificationServiceImpl(CertificationRepository certificationRepository, ModelMapper modelMapper, UserProfileRepository userProfileRepository) {
+
         this.certificationRepository = certificationRepository;
         this.modelMapper = modelMapper;
         this.userProfileRepository = userProfileRepository;

@@ -9,12 +9,17 @@ import java.util.List;
 @Data
 @Entity
 public class Feedback {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String description;
+
     private Integer stars;
+
     private Integer reports;
+
     private LocalDate date;
 
     @ManyToOne
@@ -23,5 +28,4 @@ public class Feedback {
 
     @ElementCollection
     private List<Integer> userReportList;
-
 }
